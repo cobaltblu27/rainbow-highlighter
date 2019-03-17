@@ -11,8 +11,8 @@ export function activate(context: vscode.ExtensionContext) {
     if (!editor) {
       return;
     }
-	const selection = editor.selection;
-	
+    const selection = editor.selection;
+
     //const regex = /[\d\w_]+/;
     const regex = undefined;
 
@@ -32,18 +32,14 @@ export function activate(context: vscode.ExtensionContext) {
       highlightList.push(selectedText);
     }
 
-	vscode.window.showInformationMessage(highlightList.join());
-	//decorator.highlight(highlightList);
-
-    const decorationType = vscode.window.createTextEditorDecorationType({
-      overviewRulerColor: 'yellow'
-	});
-    editor.setDecorations(decorationType, [range]);
+    vscode.window.showInformationMessage(highlightList.join());
+    //decorator.highlight(editor, highlightList);
+    decorator.highlightRange(editor, range);
   };
 
   let removeHighlight = () => {
     highlightList = [];
-	decorator.highlight(highlightList);
+    //decorator.highlight(highlightList);
   };
 
   context.subscriptions.push(
