@@ -1,19 +1,18 @@
 import * as vscode from "vscode";
 import { listenerCount } from "cluster";
+import { Decorator } from "./highlighter";
 
 export function activate(context: vscode.ExtensionContext) {
-
   let highlightList: string[] = [];
+  let decorator = Decorator.getInstance();
 
   let toggleHighlight = () => {
-
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
       return;
     }
-    const selection = editor.selection;
-
-    //TODO: splits variable with '-'
+	const selection = editor.selection;
+	
     //const regex = /[\d\w_]+/;
     const regex = undefined;
 
@@ -33,11 +32,18 @@ export function activate(context: vscode.ExtensionContext) {
       highlightList.push(selectedText);
     }
 
-    vscode.window.showInformationMessage(highlightList.join());
+	vscode.window.showInformationMessage(highlightList.join());
+	//decorator.highlight(highlightList);
+
+    const decorationType = vscode.window.createTextEditorDecorationType({
+      overviewRulerColor: 'yellow'
+	});
+    editor.setDecorations(decorationType, [range]);
   };
 
   let removeHighlight = () => {
     highlightList = [];
+	decorator.highlight(highlightList);
   };
 
   context.subscriptions.push(
