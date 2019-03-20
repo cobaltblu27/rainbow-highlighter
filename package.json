@@ -17,11 +17,11 @@
     "commands": [
 		{
 		  "command": "rainbow-highlighter.toggleHighlight",
-		  "title": "Toggle Highlight"
+		  "title": "Rainbow Highlighter: Toggle Highlight"
 		},
 		{
 		  "command": "rainbow-highlighter.removeHighlight",
-		  "title": "Remove Highlight"
+		  "title": "RainBow Highlighter: Remove Highlight"
 		}
     ]
   },
