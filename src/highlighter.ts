@@ -21,11 +21,11 @@ class DecoratorClass {
     );
     editor.setDecorations(decorationType, this.getRanges(words));
   }
-  public highlightRange(editor: vscode.TextEditor, range: vscode.Range) {
+  public highlightRange(editor: vscode.TextEditor, range: vscode.Range[]) {
     const decorationType = vscode.window.createTextEditorDecorationType(
       this.yellowDecoration
     );
-    editor.setDecorations(decorationType, [range]);
+    editor.setDecorations(decorationType, range);
   }
 }
 

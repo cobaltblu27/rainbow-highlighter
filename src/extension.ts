@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { listenerCount } from "cluster";
 import { Decorator } from "./highlighter";
+import { getVarRangeList } from "./utils";
 
 export function activate(context: vscode.ExtensionContext) {
   let highlightList: string[] = [];
@@ -32,9 +33,10 @@ export function activate(context: vscode.ExtensionContext) {
       highlightList.push(selectedText);
     }
 
+    const rangeList = getVarRangeList(editor, selectedText);
+
     vscode.window.showInformationMessage(highlightList.join());
-    //decorator.highlight(editor, highlightList);
-    decorator.highlightRange(editor, range);
+    decorator.highlightRange(editor, rangeList);
   };
 
   let removeHighlight = () => {
