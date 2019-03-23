@@ -4,28 +4,42 @@ import { configure } from "vscode/lib/testrunner";
 //TODO add options
 //TODO editor is undefined
 class DecoratorClass {
-  private yellowDecoration = {
-    overviewRulerColor: "yellow",
-    backgroundColor: "yellow"
-  };
+  private decorationList : vscode.TextEditorDecorationType[] = [];
+  private colorPalette : (() => vscode.TextEditorDecorationType) [] = 
+    vscode.workspace.getConfiguration('rainbow-highlighter')['palette']
+    .map((color: string) => {
+      return () => {
+        const decoration = vscode.window.createTextEditorDecorationType({
+          backgroundColor: color,
+          overviewRulerColor: color,
+          });
+        this.decorationList.push(decoration);
+        return decoration;
+        }
+      }
+    );
+  private decorationIndex = 0;
+  
+  private getIndex = () => {
+    const i = this.decorationIndex;
+    this.decorationIndex = i >= this.colorPalette.length ? 0 : i + 1;
+    return i;
+  }
   public DecoratorClass() {}
 
   private getRanges(words: string[]): vscode.Range[] {
     const ranges: vscode.Range[] = [];
     return ranges;
   }
+  public removeHighlights = () => {
+
+  }
 
   public highlight(editor: vscode.TextEditor, words: string[]) {
-    const decorationType = vscode.window.createTextEditorDecorationType(
-      this.yellowDecoration
-    );
-    editor.setDecorations(decorationType, this.getRanges(words));
+    editor.setDecorations(this.colorPalette[this.getIndex()](), this.getRanges(words));
   }
   public highlightRange(editor: vscode.TextEditor, range: vscode.Range[]) {
-    const decorationType = vscode.window.createTextEditorDecorationType(
-      this.yellowDecoration
-    );
-    editor.setDecorations(decorationType, range);
+    editor.setDecorations(this.colorPalette[this.getIndex()](), range);
   }
 }
 

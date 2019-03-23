@@ -5,9 +5,9 @@ import { getVarRangeList } from "./utils";
 
 export function activate(context: vscode.ExtensionContext) {
   let highlightList: string[] = [];
-  let decorator = Decorator.getInstance();
+  const decorator = Decorator.getInstance();
 
-  let toggleHighlight = () => {
+  const toggleHighlight = () => {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
       return;
@@ -39,9 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
     decorator.highlightRange(editor, rangeList);
   };
 
-  let removeHighlight = () => {
+  const removeHighlight = () => {
     highlightList = [];
-    //decorator.highlight(highlightList);
+    decorator.removeHighlights();
   };
 
   context.subscriptions.push(
