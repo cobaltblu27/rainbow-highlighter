@@ -10,6 +10,8 @@ class DecoratorClass {
     .map((color: string) => {
       return () => {
         const decoration = vscode.window.createTextEditorDecorationType({
+          // TODO: make a option that enables 
+          // highlight by border instead of background
           backgroundColor: color,
           overviewRulerColor: color,
           });
@@ -22,17 +24,24 @@ class DecoratorClass {
   
   private getIndex = () => {
     const i = this.decorationIndex;
-    this.decorationIndex = i >= this.colorPalette.length ? 0 : i + 1;
+    this.decorationIndex = i >= this.colorPalette.length - 1 ? 0 : i + 1;
     return i;
   }
+
+  private resetIndex = () => {this.decorationIndex = 0;};
+
   public DecoratorClass() {}
 
   private getRanges(words: string[]): vscode.Range[] {
     const ranges: vscode.Range[] = [];
     return ranges;
   }
-  public removeHighlights = () => {
-
+  public removeHighlights(editor: vscode.TextEditor) {
+    this.decorationList.forEach(d => 
+      editor.setDecorations(d, [])
+    );
+    this.decorationList = [];
+    this.resetIndex();
   }
 
   public highlight(editor: vscode.TextEditor, words: string[]) {

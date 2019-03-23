@@ -40,8 +40,12 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const removeHighlight = () => {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
     highlightList = [];
-    decorator.removeHighlights();
+    decorator.removeHighlights(editor);
   };
 
   context.subscriptions.push(
