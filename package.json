@@ -41,6 +41,16 @@
 		  "command": "rainbow-highlighter.removeHighlight",
 		  "title": "RainBow Highlighter: Remove Highlight"
 		}
+    ],
+    "keybindings": [
+      {
+        "command": "rainbow-highlighter.toggleHighlight",
+        "key": "shift+alt+z"
+      },
+      {
+        "command": "rainbow-highlighter.removeHighlight",
+        "key": "shift+alt+a"
+      }
     ]
   },
   "scripts": {
