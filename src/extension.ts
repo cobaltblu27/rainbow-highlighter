@@ -29,14 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (highlightList.indexOf(selectedText) > -1) {
       highlightList = highlightList.filter(x => x !== selectedText);
+      decorator.removeHighlight(editor, selectedText);
+      return;
     } else {
       highlightList.push(selectedText);
     }
 
     const rangeList = getVarRangeList(editor, selectedText);
 
-    vscode.window.showInformationMessage(highlightList.join());
-    decorator.highlightRange(editor, rangeList);
+    decorator.highlightRange(editor, rangeList, selectedText);
   };
 
   const removeHighlight = () => {

@@ -3,14 +3,14 @@ import { configure } from "vscode/lib/testrunner";
 
 //TODO add options
 class DecoratorClass {
-  private decorationList: vscode.TextEditorDecorationType[] = [];
+  private decorationVarList : {[id: string]: vscode.TextEditorDecorationType | undefined }= {};
   private useBorder = vscode.workspace.getConfiguration("rainbow-highlighter")[
     "use-border"
   ];
-  private colorPalette: (() => vscode.TextEditorDecorationType)[] = vscode.workspace
+  private colorPalette: ((varName: string) => vscode.TextEditorDecorationType)[] = vscode.workspace
     .getConfiguration("rainbow-highlighter")
     ["palette"].map((color: string) => {
-      return () => {
+      return (varName: string) => {
         const decoration = vscode.window.createTextEditorDecorationType({
           //TODO: borderColor doesn't work,
           //TODO: make borderColor more vivid
@@ -18,7 +18,7 @@ class DecoratorClass {
           borderColor: this.useBorder ? color : undefined,
           overviewRulerColor: color
         });
-        this.decorationList.push(decoration);
+        this.decorationVarList[varName] = (decoration);
         return decoration;
       };
     });
@@ -36,24 +36,27 @@ class DecoratorClass {
 
   public DecoratorClass() {}
 
-  private getRanges(words: string[]): vscode.Range[] {
-    const ranges: vscode.Range[] = [];
-    return ranges;
+  public removeHighlight(editor: vscode.TextEditor, key: string){
+    const decoration = this.decorationVarList[key];
+    if(decoration){
+      editor.setDecorations(decoration, []);
+      this.decorationVarList[key] = undefined;
+    }
   }
   public removeHighlights(editor: vscode.TextEditor) {
-    this.decorationList.forEach(d => editor.setDecorations(d, []));
-    this.decorationList = [];
+    Object.keys(this.decorationVarList)
+      .map(k => this.decorationVarList[k])
+      .filter(d => d)
+      .forEach(d => editor.setDecorations(d!, []))
+    this.decorationVarList = {};
     this.resetIndex();
   }
-
-  public highlight(editor: vscode.TextEditor, words: string[]) {
-    editor.setDecorations(
-      this.colorPalette[this.getIndex()](),
-      this.getRanges(words)
-    );
-  }
-  public highlightRange(editor: vscode.TextEditor, range: vscode.Range[]) {
-    editor.setDecorations(this.colorPalette[this.getIndex()](), range);
+  public highlightRange(
+    editor: vscode.TextEditor, 
+    range: vscode.Range[],
+    key: string,
+  ) {
+    editor.setDecorations(this.colorPalette[this.getIndex()](key), range);
   }
 }
 
