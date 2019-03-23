@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 
+
+//TODO: this doesn't work well
 export const getVarRangeList = (
   editor: vscode.TextEditor,
   name: string
@@ -7,8 +9,9 @@ export const getVarRangeList = (
   const getAllIndexes = (str: string, substr: string) => {
     var indexes: number[] = [],
       i = -1;
-    while ((i = str.indexOf(substr, i + substr.length)) !== -1) {
+    while ((i = str.indexOf(substr, i)) !== -1) {
       indexes.push(i);
+      i = i + substr.length;
     }
     return indexes;
   };
@@ -20,7 +23,9 @@ export const getVarRangeList = (
         const position = new vscode.Position(i, j);
         return editor.document.getWordRangeAtPosition(position);
       })
-      .filter(range => range && editor.document.getText(range) === name)
+      .filter(range =>
+        range && editor.document.getText(range) === name
+      )
       .map(range => {
         if (range) {
           ranges.push(range);
