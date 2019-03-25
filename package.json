@@ -2,7 +2,7 @@
   "name": "rainbow-highlighter",
   "displayName": "Rainbow Highlighter",
   "description": " Highlight multiple variables you select, with multiple colors, making important variables stand out in the code. Because more colors in our life == good :)",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.32.0"
   },
@@ -18,29 +18,30 @@
       "type": "object",
       "title": "rainbow-highlighter configuration",
       "properties": {
-        "rainbow-highlighter.palette":{
+        "rainbow-highlighter.palette": {
           "type": "array",
           "default": [
             "rgba(255,255,64,0.27)",
             "rgba(127,255,127,0.27)",
             "rgba(255,127,255,0.27)",
-            "rgba(79,236,236,0.27)"]
+            "rgba(79,236,236,0.27)"
+          ]
         },
-        "rainbow-highlighter.use-border":{
+        "rainbow-highlighter.use-border": {
           "type": "boolean",
           "default": false
         }
       }
     },
     "commands": [
-		{
-		  "command": "rainbow-highlighter.toggleHighlight",
-		  "title": "Rainbow Highlighter: Toggle Highlight"
-		},
-		{
-		  "command": "rainbow-highlighter.removeHighlight",
-		  "title": "RainBow Highlighter: Remove Highlight"
-		}
+      {
+        "command": "rainbow-highlighter.toggleHighlight",
+        "title": "Rainbow Highlighter: Toggle Highlight"
+      },
+      {
+        "command": "rainbow-highlighter.removeHighlight",
+        "title": "RainBow Highlighter: Remove Highlight"
+      }
     ],
     "keybindings": [
       {
