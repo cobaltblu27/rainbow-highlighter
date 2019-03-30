@@ -3,22 +3,33 @@ import { configure } from "vscode/lib/testrunner";
 
 //TODO add options
 class DecoratorClass {
-  private decorationVarList : {[id: string]: vscode.TextEditorDecorationType | undefined }= {};
-  private useBorder = vscode.workspace.getConfiguration("rainbow-highlighter")[
-    "use-border"
-  ];
-  private colorPalette: ((varName: string) => vscode.TextEditorDecorationType)[] = vscode.workspace
+  private decorationVarList: {
+    [id: string]: vscode.TextEditorDecorationType | undefined;
+  } = {};
+
+  private config = vscode.workspace.getConfiguration("rainbow-highlighter");
+
+  private buildColor = (color: string) => {
+    const putAlpha = (c: string) => {
+      const colorVal = c.match(/\((.+)\)/)![1];
+      return `rgba(${colorVal}, ${this.config["background-alpha"]})`;
+    };
+    return {
+      backgroundColor: this.config["use-border"] ? undefined : putAlpha(color),
+      border: this.config["use-border"] ? `2px solid ${color}` : undefined,
+      overviewRulerColor: color
+    };
+  }
+  private colorPalette: ((
+    varName: string
+  ) => vscode.TextEditorDecorationType)[] = vscode.workspace
     .getConfiguration("rainbow-highlighter")
     ["palette"].map((color: string) => {
       return (varName: string) => {
-        const decoration = vscode.window.createTextEditorDecorationType({
-          //TODO: borderColor doesn't work,
-          //TODO: make borderColor more vivid
-          backgroundColor: this.useBorder ? undefined : color,
-          borderColor: this.useBorder ? color : undefined,
-          overviewRulerColor: color
-        });
-        this.decorationVarList[varName] = (decoration);
+        const decoration = vscode.window.createTextEditorDecorationType(
+          this.buildColor(color)
+        );
+        this.decorationVarList[varName] = decoration;
         return decoration;
       };
     });
@@ -28,17 +39,17 @@ class DecoratorClass {
     const i = this.decorationIndex;
     this.decorationIndex = i >= this.colorPalette.length - 1 ? 0 : i + 1;
     return i;
-  }
+  };
 
   private resetIndex = () => {
     this.decorationIndex = 0;
-  }
+  };
 
   public DecoratorClass() {}
 
-  public removeHighlight(editor: vscode.TextEditor, key: string){
+  public removeHighlight(editor: vscode.TextEditor, key: string) {
     const decoration = this.decorationVarList[key];
-    if(decoration){
+    if (decoration) {
       editor.setDecorations(decoration, []);
       this.decorationVarList[key] = undefined;
     }
@@ -47,14 +58,14 @@ class DecoratorClass {
     Object.keys(this.decorationVarList)
       .map(k => this.decorationVarList[k])
       .filter(d => d)
-      .forEach(d => editor.setDecorations(d!, []))
+      .forEach(d => editor.setDecorations(d!, []));
     this.decorationVarList = {};
     this.resetIndex();
   }
   public highlightRange(
-    editor: vscode.TextEditor, 
+    editor: vscode.TextEditor,
     range: vscode.Range[],
-    key: string,
+    key: string
   ) {
     editor.setDecorations(this.colorPalette[this.getIndex()](key), range);
   }

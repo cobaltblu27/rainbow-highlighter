@@ -2,7 +2,7 @@
   "name": "rainbow-highlighter",
   "displayName": "Rainbow Highlighter",
   "description": " Highlight multiple variables you select, with multiple colors, making important variables stand out in the code. Because more colors in our life == good :)",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.32.0"
   },
@@ -21,11 +21,15 @@
         "rainbow-highlighter.palette": {
           "type": "array",
           "default": [
-            "rgba(255,255,64,0.27)",
-            "rgba(127,255,127,0.27)",
-            "rgba(255,127,255,0.27)",
-            "rgba(79,236,236,0.27)"
+            "rgb(255,255,64)",
+            "rgb(127,255,127)",
+            "rgb(255,127,255)",
+            "rgb(79,236,236)"
           ]
+        },
+        "rainbow-highlighter.background-alpha": {
+          "type": "number",
+          "default": 0.27
         },
         "rainbow-highlighter.use-border": {
           "type": "boolean",
