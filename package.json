@@ -3,6 +3,7 @@
   "displayName": "Rainbow Highlighter",
   "description": " Highlight multiple variables you select, with multiple colors, making important variables stand out in the code. Because more colors in our life == good :)",
   "version": "0.0.0",
+  "publisher": "cobaltblu27",
   "engines": {
     "vscode": "^1.32.0"
   },
