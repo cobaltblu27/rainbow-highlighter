@@ -56,11 +56,26 @@ export function activate(context: vscode.ExtensionContext) {
     )
   );
 
+  const onEditorOpen = (editors: vscode.TextEditor[]) => {
+    editors.forEach(editor => {
+      highlightList.forEach(text => {
+        const rangeList = getVarRangeList(editor, text);
+        decorator.highlightRange(editor, rangeList, text);
+      });
+    });
+  };
+
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "rainbow-highlighter.removeHighlight",
       removeHighlight
     )
+  );
+
+  vscode.window.onDidChangeVisibleTextEditors(
+    onEditorOpen,
+    null,
+    context.subscriptions
   );
 }
 
