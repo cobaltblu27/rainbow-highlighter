@@ -1,6 +1,7 @@
 # Change Log
 
 
-## [Unreleased]
+## 0.0.2  
 
-- Initial release
+- Changed border to default instead of background highlight  
+- Fixed bug of highlight not renewing on text change  

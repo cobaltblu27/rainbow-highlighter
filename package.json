@@ -38,7 +38,7 @@
         },
         "rainbow-highlighter.use-border": {
           "type": "boolean",
-          "default": false
+          "default": true
         }
       }
     },

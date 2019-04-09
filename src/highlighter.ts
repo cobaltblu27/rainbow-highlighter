@@ -19,7 +19,7 @@ class DecoratorClass {
       border: this.config["use-border"] ? `2px solid ${color}` : undefined,
       overviewRulerColor: color
     };
-  }
+  };
   private colorPalette: ((
     varName: string
   ) => vscode.TextEditorDecorationType)[] = vscode.workspace
@@ -65,9 +65,12 @@ class DecoratorClass {
   public highlightRange(
     editor: vscode.TextEditor,
     range: vscode.Range[],
-    key: string
+    key: string,
+    index: number | undefined
   ) {
-    editor.setDecorations(this.colorPalette[this.getIndex()](key), range);
+    const colorIndex = index ? index : this.getIndex();
+    editor.setDecorations(this.colorPalette[colorIndex](key), range);
+    return colorIndex;
   }
 }
 
