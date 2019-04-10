@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import { configure } from "vscode/lib/testrunner";
 
 //TODO add options
 class DecoratorClass {
