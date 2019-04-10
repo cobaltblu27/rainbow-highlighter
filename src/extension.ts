@@ -50,9 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const selectedText = editor.document.getText(range);
 
-    vscode.window.showInformationMessage(highlightList.join(" "));
     if (highlightList.indexOf(selectedText) > -1) {
-      vscode.window.showInformationMessage("remove");
       highlightOff(editor, selectedText);
       return;
     }
