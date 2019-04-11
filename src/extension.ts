@@ -52,6 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (highlightList.indexOf(selectedText) > -1) {
       highlightOff(editor, selectedText);
+      delete colorMap[selectedText];
       return;
     }
     highlightOn(editor, selectedText);
@@ -63,6 +64,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
     highlightList = [];
+    colorMap = {};
     decorator.removeHighlights(editor);
   };
 
