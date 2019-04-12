@@ -67,7 +67,7 @@ class DecoratorClass {
     key: string,
     index: number | undefined
   ) {
-    const colorIndex = index ? index : this.getIndex();
+    const colorIndex = index !== undefined ? index : this.getIndex();
     editor.setDecorations(this.colorPalette[colorIndex](key), range);
     return colorIndex;
   }
