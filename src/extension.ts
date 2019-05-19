@@ -6,6 +6,8 @@ interface ColorMap {
   [key: string]: number;
 }
 
+const log = vscode.window.showInformationMessage;
+
 export function activate(context: vscode.ExtensionContext) {
   let highlightList: string[] = [];
   let colorMap: ColorMap = {};
@@ -31,41 +33,37 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const toggleHighlight = () => {
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
-    const selection = editor.selection;
+    vscode.window.visibleTextEditors.forEach(editor => {
+      const selection = editor.selection;
 
-    //const regex = /[\d\w_]+/;
-    const regex = undefined;
+      //const regex = /[\d\w_]+/;
+      const regex = undefined;
 
-    const range = editor.document.getWordRangeAtPosition(
-      selection.anchor,
-      regex
-    );
-    if (!range) {
-      return;
-    }
+      const range = editor.document.getWordRangeAtPosition(
+        selection.anchor,
+        regex
+      );
+      if (!range) {
+        return;
+      }
 
-    const selectedText = editor.document.getText(range);
+      const selectedText = editor.document.getText(range);
 
-    if (highlightList.indexOf(selectedText) > -1) {
-      highlightOff(editor, selectedText);
-      delete colorMap[selectedText];
-      return;
-    }
-    highlightOn(editor, selectedText);
+      if (highlightList.indexOf(selectedText) > -1) {
+        highlightOff(editor, selectedText);
+        delete colorMap[selectedText];
+        return;
+      }
+      highlightOn(editor, selectedText);
+    });
   };
 
   const removeAllHighlight = () => {
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
     highlightList = [];
     colorMap = {};
-    decorator.removeHighlights(editor);
+    vscode.window.visibleTextEditors.forEach(editor => {
+      decorator.removeHighlights(editor);
+    });
   };
 
   context.subscriptions.push(
@@ -91,15 +89,30 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
+    //TODO: this causes not updating problem
+    vscode.window.visibleTextEditors.forEach(editor => {
+      if (editor.document === e.document) {
+        highlightList.forEach(v => {
+          decorator.removeHighlight(editor!, v);
+          highlightOn(editor!, v);
+        });
+      }
+    });
+  };
+
+  /*
+  const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
       return;
     }
     highlightList.forEach(v => {
+      log(v);
       decorator.removeHighlight(editor!, v);
       highlightOn(editor!, v);
     });
   };
+  */
 
   context.subscriptions.push(
     vscode.commands.registerCommand(

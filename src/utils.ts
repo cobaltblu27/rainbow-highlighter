@@ -1,7 +1,5 @@
 import * as vscode from "vscode";
 
-
-//TODO: this doesn't work well
 export const getVarRangeList = (
   editor: vscode.TextEditor,
   name: string
@@ -23,9 +21,7 @@ export const getVarRangeList = (
         const position = new vscode.Position(i, j);
         return editor.document.getWordRangeAtPosition(position);
       })
-      .filter(range =>
-        range && editor.document.getText(range) === name
-      )
+      .filter(range => range && editor.document.getText(range) === name)
       .map(range => {
         if (range) {
           ranges.push(range);
