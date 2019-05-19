@@ -18,6 +18,7 @@
     "url": "https://github.com/cobaltblu27/rainbow-highlighter.git"
   },
   "main": "./out/extension.js",
+  "icon": "images/icon.png",
   "contributes": {
     "configuration": {
       "type": "object",
