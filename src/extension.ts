@@ -58,6 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
     if (turnOff) {
       delete colorMap[selectedText];
+      decorator.clearVariable(selectedText);
     }
   };
 
@@ -96,25 +97,17 @@ export function activate(context: vscode.ExtensionContext) {
       if (editor.document === e.document) {
         highlightList.forEach(v => {
           decorator.removeHighlight(editor!, v);
+        });
+      }
+    });
+    vscode.window.visibleTextEditors.forEach(editor => {
+      if (editor.document === e.document) {
+        highlightList.forEach(v => {
           highlightOn(editor!, v);
         });
       }
     });
   };
-
-  /*
-  const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
-    highlightList.forEach(v => {
-      log(v);
-      decorator.removeHighlight(editor!, v);
-      highlightOn(editor!, v);
-    });
-  };
-  */
 
   context.subscriptions.push(
     vscode.commands.registerCommand(

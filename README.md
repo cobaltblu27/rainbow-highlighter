@@ -19,8 +19,6 @@ Press shift+alt+a to remove all highlights.
 
 ## Known Issues
 
-highlighting a varaiable one split window and editing on another split window stops previously highlighted variables from updating.
-
 ## Release Notes
 
 ### 1.0.0

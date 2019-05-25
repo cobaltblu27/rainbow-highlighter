@@ -51,9 +51,13 @@ class DecoratorClass {
     const decoration = this.decorationVarList[key];
     if (decoration) {
       editor.setDecorations(decoration, []);
-      this.decorationVarList[key] = undefined;
     }
   }
+
+  public clearVariable(key: string) {
+    this.decorationVarList[key] = undefined;
+  }
+
   public removeHighlights(editor: vscode.TextEditor) {
     Object.keys(this.decorationVarList)
       .map(k => this.decorationVarList[k])
@@ -69,7 +73,11 @@ class DecoratorClass {
     index: number | undefined
   ) {
     const colorIndex = index !== undefined ? index : this.getIndex();
-    editor.setDecorations(this.colorPalette[colorIndex](key), range);
+    let decoration = this.decorationVarList[key];
+    if (decoration === undefined) {
+      decoration = this.colorPalette[colorIndex](key);
+    }
+    editor.setDecorations(decoration, range);
     return colorIndex;
   }
 }
