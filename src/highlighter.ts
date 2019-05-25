@@ -48,10 +48,8 @@ class DecoratorClass {
   public DecoratorClass() {}
 
   public removeHighlight(editor: vscode.TextEditor, key: string) {
-    console.log("remove");
     const decoration = this.decorationVarList[key];
     if (decoration) {
-      console.log("process remove");
       editor.setDecorations(decoration, []);
       this.decorationVarList[key] = undefined;
     }

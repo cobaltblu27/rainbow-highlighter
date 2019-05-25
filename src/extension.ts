@@ -77,7 +77,6 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const renewHighlight = (editors: vscode.TextEditor[]) => {
-    log("renew");
     editors.forEach(editor => {
       highlightList.forEach(text => {
         const rangeList = getVarRangeList(editor, text);
@@ -94,11 +93,12 @@ export function activate(context: vscode.ExtensionContext) {
 
   const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
     vscode.window.visibleTextEditors.forEach(editor => {
-      highlightList.forEach(v => {
-        //TODO: removeHighlight not working in updateHighlight
-        decorator.removeHighlight(editor!, v);
-        highlightOn(editor!, v);
-      });
+      if (editor.document === e.document) {
+        highlightList.forEach(v => {
+          decorator.removeHighlight(editor!, v);
+          highlightOn(editor!, v);
+        });
+      }
     });
   };
 
