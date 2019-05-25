@@ -33,29 +33,33 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const toggleHighlight = () => {
+    const currentEditor = vscode.window.activeTextEditor;
+    if (!currentEditor) {
+      return;
+    }
+    const selection = currentEditor.selection;
+    //const regex = /[\d\w_]+/;
+    const regex = undefined;
+    const range = currentEditor.document.getWordRangeAtPosition(
+      selection.anchor,
+      regex
+    );
+    if (!range) {
+      return;
+    }
+    const selectedText = currentEditor.document.getText(range);
+    const turnOff = highlightList.indexOf(selectedText) > -1;
+
     vscode.window.visibleTextEditors.forEach(editor => {
-      const selection = editor.selection;
-
-      //const regex = /[\d\w_]+/;
-      const regex = undefined;
-
-      const range = editor.document.getWordRangeAtPosition(
-        selection.anchor,
-        regex
-      );
-      if (!range) {
-        return;
-      }
-
-      const selectedText = editor.document.getText(range);
-
-      if (highlightList.indexOf(selectedText) > -1) {
+      if (turnOff) {
         highlightOff(editor, selectedText);
-        delete colorMap[selectedText];
-        return;
+      } else {
+        highlightOn(editor, selectedText);
       }
-      highlightOn(editor, selectedText);
     });
+    if (turnOff) {
+      delete colorMap[selectedText];
+    }
   };
 
   const removeAllHighlight = () => {
@@ -74,6 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   const renewHighlight = (editors: vscode.TextEditor[]) => {
+    log("renew");
     editors.forEach(editor => {
       highlightList.forEach(text => {
         const rangeList = getVarRangeList(editor, text);
@@ -89,6 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
+    log("update");
     //TODO: this causes not updating problem
     vscode.window.visibleTextEditors.forEach(editor => {
       if (editor.document === e.document) {
