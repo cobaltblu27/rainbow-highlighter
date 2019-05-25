@@ -1,12 +1,11 @@
 import * as vscode from "vscode";
 import { Decorator } from "./highlighter";
 import { getVarRangeList } from "./utils";
+import { log } from "util";
 
 interface ColorMap {
   [key: string]: number;
 }
-
-const log = vscode.window.showInformationMessage;
 
 export function activate(context: vscode.ExtensionContext) {
   let highlightList: string[] = [];
@@ -33,29 +32,33 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const toggleHighlight = () => {
+    const currentEditor = vscode.window.activeTextEditor;
+    if (!currentEditor) {
+      return;
+    }
+    const selection = currentEditor.selection;
+    //const regex = /[\d\w_]+/;
+    const regex = undefined;
+    const range = currentEditor.document.getWordRangeAtPosition(
+      selection.anchor,
+      regex
+    );
+    if (!range) {
+      return;
+    }
+    const selectedText = currentEditor.document.getText(range);
+    const turnOff = highlightList.indexOf(selectedText) > -1;
+
     vscode.window.visibleTextEditors.forEach(editor => {
-      const selection = editor.selection;
-
-      //const regex = /[\d\w_]+/;
-      const regex = undefined;
-
-      const range = editor.document.getWordRangeAtPosition(
-        selection.anchor,
-        regex
-      );
-      if (!range) {
-        return;
-      }
-
-      const selectedText = editor.document.getText(range);
-
-      if (highlightList.indexOf(selectedText) > -1) {
+      if (turnOff) {
         highlightOff(editor, selectedText);
-        delete colorMap[selectedText];
-        return;
+      } else {
+        highlightOn(editor, selectedText);
       }
-      highlightOn(editor, selectedText);
     });
+    if (turnOff) {
+      delete colorMap[selectedText];
+    }
   };
 
   const removeAllHighlight = () => {
@@ -89,14 +92,12 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
-    //TODO: this causes not updating problem
     vscode.window.visibleTextEditors.forEach(editor => {
-      if (editor.document === e.document) {
-        highlightList.forEach(v => {
-          decorator.removeHighlight(editor!, v);
-          highlightOn(editor!, v);
-        });
-      }
+      highlightList.forEach(v => {
+        //TODO: removeHighlight not working in updateHighlight
+        decorator.removeHighlight(editor!, v);
+        highlightOn(editor!, v);
+      });
     });
   };
 
