@@ -30,3 +30,5 @@ export const getVarRangeList = (
   }
   return ranges;
 };
+
+export const log = vscode.window.showInformationMessage;

@@ -1,12 +1,11 @@
 import * as vscode from "vscode";
 import { Decorator } from "./highlighter";
 import { getVarRangeList } from "./utils";
+import { log } from "util";
 
 interface ColorMap {
   [key: string]: number;
 }
-
-const log = vscode.window.showInformationMessage;
 
 export function activate(context: vscode.ExtensionContext) {
   let highlightList: string[] = [];
@@ -94,15 +93,12 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   const updateHighlight = (e: vscode.TextDocumentChangeEvent) => {
-    log("update");
-    //TODO: this causes not updating problem
     vscode.window.visibleTextEditors.forEach(editor => {
-      if (editor.document === e.document) {
-        highlightList.forEach(v => {
-          decorator.removeHighlight(editor!, v);
-          highlightOn(editor!, v);
-        });
-      }
+      highlightList.forEach(v => {
+        //TODO: removeHighlight not working in updateHighlight
+        decorator.removeHighlight(editor!, v);
+        highlightOn(editor!, v);
+      });
     });
   };
 
