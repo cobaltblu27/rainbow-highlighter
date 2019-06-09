@@ -79,6 +79,9 @@
     "vscode": "^1.1.28"
   },
   "dependencies": {
+    "fstream": "^1.0.12",
+    "js-yaml": "^3.13.1",
+    "querystringify": "^2.0.0",
     "tar": "^4.4.2"
   }
 }
