@@ -24,3 +24,6 @@ Press shift+alt+a to remove all highlights.
 ### 1.0.0
 
 Initial release
+
+
+https://marketplace.visualstudio.com/items?itemName=cobaltblu27.rainbow-highlighter  
