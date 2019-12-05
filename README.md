@@ -13,7 +13,7 @@ Press shift+alt+a to remove all highlights.
 
 ## Extension Settings
 
-`rainbow-highlighter.pallete`: Set of colors that will be used for highlighting.  
+`rainbow-highlighter.palette`: Set of colors that will be used for highlighting.  
 `rainbow-highlighter.background-alpha`: If you're using background, this value will be the alpha value for background.  
 `rainbow-highlighter.use-border`: Use border rather than background, like gif above.
 
