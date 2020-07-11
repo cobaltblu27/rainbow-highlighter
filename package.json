@@ -85,6 +85,7 @@
   "dependencies": {
     "fstream": "^1.0.12",
     "js-yaml": "^3.13.1",
+    "minimist": "^0.2.1",
     "querystringify": "^2.0.0",
     "tar": "^4.4.2"
   }
