@@ -18,12 +18,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
     editors.forEach(editor => {
       const rangeList = getVarRangeList(editor, variable)
-      const color = variable in colorMap ? colorMap[variable] : undefined
-      colorMap[variable] = decorator.highlightRange(
+      if (!(variable in colorMap)) {
+        colorMap[variable] = decorator.getNewColor(Object.values(colorMap))
+      }
+      decorator.highlightRange(
         editor,
         rangeList,
         variable,
-        color
+        colorMap[variable]
       )
     })
   }
@@ -81,8 +83,8 @@ export function activate(context: vscode.ExtensionContext) {
     editors.forEach(editor => {
       highlightList.forEach(text => {
         const rangeList = getVarRangeList(editor, text)
-        const color = text in colorMap ? colorMap[text] : undefined
-        colorMap[text] = decorator.highlightRange(
+        const color = colorMap[text]
+        decorator.highlightRange(
           editor,
           rangeList,
           text,

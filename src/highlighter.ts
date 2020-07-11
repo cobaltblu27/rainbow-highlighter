@@ -20,6 +20,7 @@ class DecoratorClass {
       overviewRulerColor: color
     }
   };
+
   private colorPalette: ((
     varName: string
   ) => vscode.TextEditorDecorationType)[] = vscode.workspace
@@ -33,16 +34,14 @@ class DecoratorClass {
       return decoration
     }
   });
-  private decorationIndex = 0;
 
-  private getIndex = () => {
-    const i = this.decorationIndex
-    this.decorationIndex = i >= this.colorPalette.length - 1 ? 0 : i + 1
-    return i
-  };
-
-  private resetIndex = () => {
-    this.decorationIndex = 0
+  public getNewColor = (usedColors: number[] = []) => {
+    const colors = [...Array(this.colorPalette.length).keys()]
+    const unusedColors = colors.filter(i => usedColors.indexOf(i) < 0)
+    if (unusedColors.length > 0) {
+      return unusedColors[0]
+    }
+    return colors[~~(Math.random() * colors.length)]
   };
 
   public DecoratorClass() { }
@@ -66,21 +65,18 @@ class DecoratorClass {
         editors.forEach(e => e.setDecorations(d!, []))
       )
     this.decorationVarList = {}
-    this.resetIndex()
   }
   public highlightRange(
     editor: vscode.TextEditor,
     range: vscode.Range[],
     key: string,
-    index: number | undefined
+    colorIndex: number
   ) {
-    const colorIndex = index !== undefined ? index : this.getIndex()
     let decoration = this.decorationVarList[key]
     if (decoration === undefined) {
       decoration = this.colorPalette[colorIndex](key)
     }
     editor.setDecorations(decoration, range)
-    return colorIndex
   }
 }
 
