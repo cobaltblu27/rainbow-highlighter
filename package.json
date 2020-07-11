@@ -51,6 +51,10 @@
       {
         "command": "rainbow-highlighter.removeHighlight",
         "title": "RainBow Highlighter: Remove Highlight"
+      },
+      {
+        "command": "rainbow-highlighter.highlight-line",
+        "title": "Rainbow Highlighter: Highlight all variables in line"
       }
     ],
     "keybindings": [

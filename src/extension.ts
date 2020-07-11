@@ -111,6 +111,36 @@ export function activate(context: vscode.ExtensionContext) {
     )
   )
 
+  const highlightLine = () => {
+    const currentEditor = vscode.window.activeTextEditor
+    if (!currentEditor) {
+      return
+    }
+    const selection = currentEditor.selection
+    const range = currentEditor.document.getWordRangeAtPosition(
+      selection.anchor,
+      /.+/
+    )
+    if (!range) {
+      return
+    }
+    const selectedText = [
+      ...currentEditor.document.getText(range)
+        .matchAll(/[\d\w_]+/g)
+    ]
+    selectedText
+      .map(match => match.toString())
+      .filter(word => Object.keys(colorMap).indexOf(word) < 0)
+      .forEach(word => highlightOn(vscode.window.visibleTextEditors, word))
+  }
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "rainbow-highlighter.highlight-line",
+      highlightLine
+    )
+  )
+
   vscode.window.onDidChangeVisibleTextEditors(
     renewHighlight,
     null,
